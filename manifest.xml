@@ -1,0 +1,19 @@
+<package>
+  <description brief="color_circle_tracker">
+
+     color_circle_tracker
+
+  </description>
+  <author>Miquel </author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/color_circle_tracker</url>
+  <depend package="roscpp"/>
+  <depend package="image_transport"/>
+  <depend package="sensor_msgs"/>
+  <depend package="cv_bridge"/>
+  <depend package="std_srvs"/>
+
+</package>
+
+
