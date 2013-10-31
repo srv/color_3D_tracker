@@ -10,9 +10,11 @@
   <url>http://ros.org/wiki/color_circle_tracker</url>
   <depend package="roscpp"/>
   <depend package="image_transport"/>
+  <depend package="image_geometry"/>
   <depend package="sensor_msgs"/>
   <depend package="cv_bridge"/>
   <depend package="std_srvs"/>
+  <depend package="tf"/>
 
 </package>
 

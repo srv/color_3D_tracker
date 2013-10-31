@@ -28,3 +28,11 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
+
+rosbuild_add_executable(tracker_node src/node_tracker.cpp
+                                     src/tracker.cpp)
+rosbuild_link_boost(tracker_node signals)
+
+rosbuild_add_executable(trainer_node src/node_trainer.cpp
+                                     src/trainer.cpp)
+rosbuild_link_boost(trainer_node signals)
