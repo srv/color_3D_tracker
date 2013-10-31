@@ -168,6 +168,9 @@ void color_circle_tracker::Tracker::stereoImageCallback(
   cv::Mat debug_image = l_cv_image_ptr->image.clone();
   cv::ellipse(debug_image, el_l, cv::Scalar(255,0,0), 2, 8 );
   cv::ellipse(debug_image, el_r, cv::Scalar(255,0,0), 2, 8 );
+
+  
+
   cv::namedWindow("kk");
   cv::imshow("kk",debug_image);
   cv::waitKey(3);
