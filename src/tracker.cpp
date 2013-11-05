@@ -125,8 +125,6 @@ void color_3D_tracker::Tracker::stereoImageCallback(
     // Put the point into a tf
     camera_to_target_.setIdentity();
     camera_to_target_.setOrigin(tf::Vector3(point3d.x, point3d.y, point3d.z));
-
-    ROS_INFO_STREAM("KK: " << point3d.x << ", " << point3d.y << ", " << point3d.z);
   }
 
   // Publish the last pose
