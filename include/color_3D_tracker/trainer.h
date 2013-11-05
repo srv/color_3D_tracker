@@ -11,13 +11,13 @@
 #include <sensor_msgs/image_encodings.h>
 #include <image_geometry/stereo_camera_model.h>
 
-#include "color_circle_tracker/stereo_processor.h"
-#include "color_circle_tracker/trainer.h"
+#include "color_3D_tracker/stereo_processor.h"
+#include "color_3D_tracker/trainer.h"
 
-#define LEFT 0
-#define RIGHT 1
+using namespace std;
+using namespace cv;
 
-namespace color_circle_tracker
+namespace color_3D_tracker
 {
 
 class Trainer : public StereoImageProcessor
@@ -36,10 +36,10 @@ public:
 	  TRAINED
 	};
 
-	cv::Mat image; //!> showing image
+	Mat image; //!> showing image
 
   // Constructors
-  Trainer(const std::string transport);
+  Trainer(const string transport);
 
   // Destructor
   ~Trainer();
@@ -47,35 +47,35 @@ public:
 private:
 
   // Trainer HSV values
-  std::string trained_model_path_;
+  string trained_model_path_;
   int num_hue_bins_;
   int num_sat_bins_;
   int num_val_bins_;
 
   int training_status_;               //!> Defines the trainer Mode
 
-  cv::Mat training_image_;            //!> Image HSV used to train
+  Mat training_image_;            //!> Image HSV used to train
 
-  cv::Point roi_rectangle_origin_;    
-  cv::Rect roi_rectangle_selection_;
+  Point roi_rectangle_origin_;    
+  Rect roi_rectangle_selection_;
 
-  cv::MatND model_histogram_;         //!> Histogram of the trained model
+  MatND model_histogram_;         //!> Histogram of the trained model
 
   void stereoImageCallback(
       const sensor_msgs::ImageConstPtr& l_image_msg,
       const sensor_msgs::ImageConstPtr& r_image_msg,
       const sensor_msgs::CameraInfoConstPtr& l_info_msg,
       const sensor_msgs::CameraInfoConstPtr& r_info_msg); //!> Image callback
-  cv::MatND train(const cv::Mat& image);
-  int detect(const cv::MatND& hist, const cv::Mat& image);
+  MatND train(const Mat& image);
+  int detect(const MatND& hist, const Mat& image);
   static void staticMouseCallback(int event, int x, int y, int flags, void* param);
   void mouseCallback(int event, int x, int y, int flags, void* param);
-  cv::MatND calculateHistogram(const cv::Mat& image, 
+  MatND calculateHistogram(const Mat& image, 
 	                             const int bins[],  
-	                             const cv::Mat& mask);
-  void showHSVHistogram(const cv::MatND& histogram,
-                        const std::string& name_hs, 
-                        const std::string& name_hv);
+	                             const Mat& mask);
+  void showHSVHistogram(const MatND& histogram,
+                        const string& name_hs, 
+                        const string& name_hv);
 };
 
 } // namespace

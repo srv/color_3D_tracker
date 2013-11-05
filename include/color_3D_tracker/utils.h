@@ -7,7 +7,10 @@
 #include <tf/transform_broadcaster.h>
 #include "opencv2/core/core.hpp"
 
-namespace color_circle_tracker
+using namespace std;
+using namespace cv;
+
+namespace color_3D_tracker
 {
 
   class Utils
@@ -35,7 +38,7 @@ namespace color_circle_tracker
       * @return point distance
       * \param 3D point
       */
-    static double euclideanDist(cv::Point3d point)
+    static double euclideanDist(Point3d point)
     {
       return sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
     }
@@ -49,7 +52,7 @@ namespace color_circle_tracker
       * \param point 1
       * \param point 2
       */
-    static bool sort_points_x(const cv::Point2d& p1, const cv::Point2d& p2)
+    static bool sort_points_x(const Point2d& p1, const Point2d& p2)
     {
         return (p1.x < p2.x);
     }
@@ -59,7 +62,7 @@ namespace color_circle_tracker
       * \param vector 1
       * \param vector 2
       */
-    static bool sort_vectors_by_size(const std::vector<cv::Point>& v1, const std::vector<cv::Point>& v2)
+    static bool sort_vectors_by_size(const vector<Point>& v1, const vector<Point>& v2)
     {
         return (v1.size() > v2.size());
     }
@@ -67,7 +70,7 @@ namespace color_circle_tracker
     /** \brief Get the directory of the package
       * @return string with the path of the ros package
       */
-    static std::string getPackageDir()
+    static string getPackageDir()
     {
       return ros::package::getPath(ROS_PACKAGE_NAME);
     }
@@ -76,8 +79,8 @@ namespace color_circle_tracker
       * @return the average error
       */
     static double getTfError(tf::Transform affineTf,
-                                                     std::vector<cv::Point3d> pointcloud_1, 
-                                                     std::vector<cv::Point3d> pointcloud_2)
+                                                     vector<Point3d> pointcloud_1, 
+                                                     vector<Point3d> pointcloud_2)
     {
       double error = 0.0;
     for (unsigned int j=0; j<pointcloud_1.size(); j++)
@@ -89,7 +92,7 @@ namespace color_circle_tracker
                         pointcloud_2[j].y,
                         pointcloud_2[j].z);
       tf::Vector3 p_computed = affineTf*p_mdl;
-      error += color_circle_tracker::Utils::euclideanDist(p_computed - p_tgt);
+      error += color_3D_tracker::Utils::euclideanDist(p_computed - p_tgt);
     }
     // Average error
     error = error / pointcloud_1.size();
@@ -102,8 +105,8 @@ namespace color_circle_tracker
       * \param input image
       * \param input histogram
       */
-    static cv::Mat calculateBackprojection(const cv::Mat& image,
-                                           const cv::MatND& histogram)
+    static Mat calculateBackprojection(const Mat& image,
+                                           const MatND& histogram)
     {
       // we assume that the image is a regular three channel image
       CV_Assert(image.type() == CV_8UC3);
@@ -117,9 +120,9 @@ namespace color_circle_tracker
       float value_ranges[] = {0, 256};
       const float* ranges_hsv[] = {hue_ranges, saturation_ranges, value_ranges};
 
-      cv::Mat back_projection;
+      Mat back_projection;
       int num_arrays = 1;
-      cv::calcBackProject(&image, num_arrays, channels, histogram,
+      calcBackProject(&image, num_arrays, channels, histogram,
              back_projection, ranges_hsv);
 
       return back_projection;
@@ -132,9 +135,9 @@ namespace color_circle_tracker
       * \param the result
       */
     static void createCombinations(
-                          const std::vector< std::vector<int> > &all_vecs, 
-                          size_t vec_idx, std::vector<int> combinations,
-                          std::vector< std::vector<int> > &result)
+                          const vector< vector<int> > &all_vecs, 
+                          size_t vec_idx, vector<int> combinations,
+                          vector< vector<int> > &result)
     {
       if (vec_idx >= all_vecs.size())
       {
@@ -144,9 +147,9 @@ namespace color_circle_tracker
       
       for (size_t i=0; i<all_vecs[vec_idx].size(); i++)
       {
-        std::vector<int> tmp = combinations;
+        vector<int> tmp = combinations;
         tmp.push_back(all_vecs[vec_idx][i]);
-        color_circle_tracker::Utils::createCombinations(all_vecs, vec_idx+1, tmp, result);
+        color_3D_tracker::Utils::createCombinations(all_vecs, vec_idx+1, tmp, result);
       }
     }
 
